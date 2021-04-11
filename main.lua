@@ -34,36 +34,17 @@ local targets = {
 }
 
 function love.load() 
- randomGenerator = love.math.newRandomGenerator()
-playerImage = love.graphics.newImage("media/stickmanR.png")
-scoreSound = love.audio.newSource("media/score.wav", "static")
+    randomGenerator = love.math.newRandomGenerator()
+    playerImage = love.graphics.newImage("media/stickmanR.png")
+    scoreSound = love.audio.newSource("media/score.wav", "static")
 end
 
 function love.draw()
     if intro == true then 
         drawIntro()
     else 
-        for i = 1, 11, 1 do
-            love.graphics.setColor(gameName[i].colorRed,gameName[i].colorGreen,gameName[i].colorBlue) 
-            love.graphics.print(gameName[i].character, gameName[i].characterPosX, 25, 0, 5, 5)
-        end
-        love.graphics.setColor( 1, 1, 1)
-        love.graphics.print("Score: " .. score, 20, 525, 0, 2, 2)
-        love.graphics.setColor(1, 1, 0)
-        love.graphics.rectangle("line", 5, 105, 590, 390)
-        if gameover == 1 then
-            love.graphics.setColor(1, 0, 0)
-            love.graphics.print("GameOver", 50, 200, 0, 8, 8)  
-        else
-            love.graphics.draw(playerImage, playerposX, playerposY)
-            for i = 1, 5, 1 do 
-                love.graphics.setColor(targets[i].colorRed, targets[i].colorGreen, targets[i].colorBlue) 
-                love.graphics.circle("fill", targets[i].targetPosX, targets[i].targetPosY, 12)
-            end
-
-        end
+        drawGameBoard() 
     end
-
 end
 
 function love.keypressed(key, scancode, isrepeat) 
@@ -160,5 +141,27 @@ function drawIntro()
     love.graphics.print("Hit space to start!", 125, 425, 0, 3, 3)
     love.graphics.setColor(1, 1, 0)
     love.graphics.rectangle("line", 5, 105, 590, 390)
+end
+
+function drawGameBoard() 
+    for i = 1, 11, 1 do
+        love.graphics.setColor(gameName[i].colorRed,gameName[i].colorGreen,gameName[i].colorBlue) 
+        love.graphics.print(gameName[i].character, gameName[i].characterPosX, 25, 0, 5, 5)
+    end
+    love.graphics.setColor( 1, 1, 1)
+    love.graphics.print("Score: " .. score, 20, 525, 0, 2, 2)
+    love.graphics.setColor(1, 1, 0)
+    love.graphics.rectangle("line", 5, 105, 590, 390)
+    if gameover == 1 then
+        love.graphics.setColor(1, 0, 0)
+        love.graphics.print("GameOver", 50, 200, 0, 8, 8)  
+    else
+        love.graphics.draw(playerImage, playerposX, playerposY)
+        for i = 1, 5, 1 do 
+            love.graphics.setColor(targets[i].colorRed, targets[i].colorGreen, targets[i].colorBlue) 
+            love.graphics.circle("fill", targets[i].targetPosX, targets[i].targetPosY, 12)
+        end
+
+    end
 end
 end 
