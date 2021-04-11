@@ -34,8 +34,8 @@ local targets = {
 
 function love.load() 
  randomGenerator = love.math.newRandomGenerator()
-playerImage = love.graphics.newImage("stickmanR.png")
-scoreSound = love.audio.newSource("score.wav", "static")
+playerImage = love.graphics.newImage("media/stickmanR.png")
+scoreSound = love.audio.newSource("media/score.wav", "static")
 end
 
 function love.draw()
