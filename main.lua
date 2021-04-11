@@ -110,7 +110,7 @@ end
     end
     
     for i = 1, 5, 1 do 
-        distance = ((playerposX - targets[i].targetPosX)^2 + (playerposY - targets[i].targetPosY)^2)^0.5
+        distance = ((playerposX + 20 - targets[i].targetPosX)^2 + (playerposY + 30 - targets[i].targetPosY)^2)^0.5
         targets[i].colorRed = targets[i].colorRed + 0.001
         targets[i].colorGreen = targets[i].colorGreen - 0.001
         targets[i].colorBlue = targets[i].colorBlue - 0.001
