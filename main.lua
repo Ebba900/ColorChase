@@ -4,12 +4,14 @@ local distance
 local randomGenerator
 local speed = 60
 local gameover = 0
-local dirX 
-local dirY
+local playerDirX 
+local playerDirY
 local playerposX = 275
 local playerposY = 275
 local scoreSound
 local intro = true
+local time = 1
+local timeDt
 
 local gameName = {
     {character = "C", characterPosX = 10, colorRed = 0, colorGreen = 1, colorBlue = 1},
@@ -32,6 +34,31 @@ local targets = {
     { targetPosX = 475, targetPosY = 420, colorRed = 0, colorGreen = 1, colorBlue = 1},
     { targetPosX = 275, targetPosY = 200, colorRed = 0, colorGreen = 1, colorBlue = 1},
 }
+function updatePlayerPos(dt)
+    if playerposX < 560 and playerDirX == 1 then
+        playerposX = playerposX + speed * dt
+    elseif playerposX > 10 and playerDirX == -1 then
+        playerposX = playerposX - speed * dt
+    end 
+    if playerposY < 445 and playerDirY == 1 then
+        playerposY = playerposY + speed * dt
+    elseif playerposY > 105 and playerDirY == -1 then
+        playerposY = playerposY - speed * dt
+    end
+end
+
+function gameOverCheck(dt)
+    if playerposX > 560 and playerDirX == 1 then
+        gameover = 1
+    elseif playerposX < 10 and playerDirX == -1 then 
+        gameover = 1
+    end 
+    if playerposY > 445 and playerDirY == 1 then
+        gameover = 1
+    elseif playerposY < 105 and playerDirY == -1 then 
+        gameover = 1
+    end
+end
 
 function love.load() 
     randomGenerator = love.math.newRandomGenerator()
@@ -51,45 +78,26 @@ function love.keypressed(key, scancode, isrepeat)
     if key == "space" then 
         intro = false
     end
+-- playerDirX = 1 means player is moving to the right, -1 to the left and 0 not moving on the X axes
+-- playerDirY = 1 means player is moving down, -1 moving up and 0 not moving on the Y axes
     if key == "right" then 
-        dirX = 1
-        dirY = 0
+        playerDirX = 1
+        playerDirY = 0
     elseif key == "left" then
-        dirX = -1
-        dirY = 0
+        playerDirX = -1
+        playerDirY = 0
     elseif key == "down" then 
-        dirX = 0
-        dirY = 1
+        playerDirX = 0
+        playerDirY = 1
     elseif key == "up" then
-        dirX = 0
-        dirY = -1
+        playerDirX = 0
+        playerDirY = -1
     end
 end
 
- function love.update(dt)
-    if playerposX < 560 and dirX == 1 then
-        playerposX = playerposX + speed * dt
-   elseif playerposX > 560 and dirX == 1 then
-    playerposX = playerposX - speed * dt
-       gameover = 1
-   elseif playerposX > 10 and dirX == -1 then
-    playerposX = playerposX - speed * dt
-   elseif playerposX < 10 and dirX == -1 then 
-    playerposX = playerposX + speed * dt
-       gameover = 1
-   end 
-   if playerposY < 445 and dirY == 1 then
-    playerposY = playerposY + speed * dt
-    elseif playerposY > 445 and dirY == 1 then
-        playerposY = playerposY - speed * dt
-        gameover = 1
-    elseif playerposY > 105 and dirY == -1 then
-        playerposY = playerposY - speed * dt
-    elseif playerposY < 105 and dirY == -1 then 
-        playerposY = playerposY + speed * dt
-        gameover = 1
-    end
-    
+function love.update(dt)
+    updatePlayerPos(dt)
+    gameOverCheck(dt)
     for i = 1, 5, 1 do 
         distance = ((playerposX + 20 - targets[i].targetPosX)^2 + (playerposY + 30 - targets[i].targetPosY)^2)^0.5
         targets[i].colorRed = targets[i].colorRed + 0.001
@@ -143,6 +151,8 @@ function drawIntro()
     love.graphics.rectangle("line", 5, 105, 590, 390)
 end
 
+
+
 function drawGameBoard() 
     for i = 1, 11, 1 do
         love.graphics.setColor(gameName[i].colorRed,gameName[i].colorGreen,gameName[i].colorBlue) 
@@ -164,4 +174,6 @@ function drawGameBoard()
 
     end
 end
-end 
+
+
+end
