@@ -47,6 +47,44 @@ function updateGameNameColor()
     end
 end       
 
+function drawIntro()
+    for i = 1, 11, 1 do
+        love.graphics.setColor(gameName[i].colorRed,gameName[i].colorGreen,gameName[i].colorBlue) 
+        love.graphics.print(gameName[i].character, gameName[i].characterPosX, 25, 0, 5, 5)
+    end
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.print("Move the man with the arrow keys, STAY AWAY from the yellow border!", 15, 240, 0, 1.3, 1.3)
+    love.graphics.print("Collect the targets when they are red to get max points!", 15, 275, 0, 1.3, 1.3)
+    love.graphics.print("Don´t wait to long they will move to another place!", 15, 310, 0, 1.3, 1,3)
+    love.graphics.print("Hit space to start!", 125, 425, 0, 3, 3)
+    love.graphics.setColor(1, 1, 0)
+    love.graphics.rectangle("line", 5, 105, 590, 390)
+end
+
+function drawGameBoard() 
+    for i = 1, 11, 1 do
+        love.graphics.setColor(gameName[i].colorRed,gameName[i].colorGreen,gameName[i].colorBlue) 
+        love.graphics.print(gameName[i].character, gameName[i].characterPosX, 25, 0, 5, 5)
+    end
+    love.graphics.setColor( 1, 1, 1)
+    love.graphics.print("Score: " .. score, 20, 525, 0, 2, 2)
+    love.graphics.setColor(1, 1, 0)
+    love.graphics.rectangle("line", 5, 105, 590, 390)
+    if gameover == true then
+        love.graphics.setColor(1, 0, 0)
+        love.graphics.print("GameOver", 50, 200, 0, 8, 8)  
+        love.graphics.setColor(0, 1, 1)
+        love.graphics.print("Press r-key to play again!", 70, 400, 0, 1, 1)
+        love.graphics.print("Press Enter to quit!", 70, 430, 0, 1, 1)
+    else
+        love.graphics.draw(playerImage, playerposX, playerposY)
+        for i = 1, 5, 1 do 
+            love.graphics.setColor(targets[i].colorRed, targets[i].colorGreen, targets[i].colorBlue) 
+            love.graphics.circle("fill", targets[i].targetPosX, targets[i].targetPosY, 12)
+        end
+
+    end
+end
 
 function updatePlayerPos(dt)
     if playerposX < 560 and playerDirX == 1 then
@@ -146,7 +184,7 @@ function love.update(dt)
             targets[i].colorGreen = targets[i].colorGreen - 0.001
             targets[i].colorBlue = targets[i].colorBlue - 0.001
         
-            if distance < 30 then 
+            if distance < 30 then -- distans between center of player and a target
                 score = score + 10 * targets[i].colorRed 
                 love.audio.stop( )
                 love.audio.play(scoreSound)
@@ -166,47 +204,4 @@ function love.update(dt)
         end
     end     
 end
-
-function drawIntro()
-    for i = 1, 11, 1 do
-        love.graphics.setColor(gameName[i].colorRed,gameName[i].colorGreen,gameName[i].colorBlue) 
-        love.graphics.print(gameName[i].character, gameName[i].characterPosX, 25, 0, 5, 5)
-    end
-    love.graphics.setColor(1, 1, 1)
-    love.graphics.print("Move the man with the arrow keys, STAY AWAY from the yellow border!", 15, 240, 0, 1.3, 1.3)
-    love.graphics.print("Collect the targets when they are red to get max points!", 15, 275, 0, 1.3, 1.3)
-    love.graphics.print("Don´t wait to long they will move to another place!", 15, 310, 0, 1.3, 1,3)
-    love.graphics.print("Hit space to start!", 125, 425, 0, 3, 3)
-    love.graphics.setColor(1, 1, 0)
-    love.graphics.rectangle("line", 5, 105, 590, 390)
-end
-
-
-
-function drawGameBoard() 
-    for i = 1, 11, 1 do
-        love.graphics.setColor(gameName[i].colorRed,gameName[i].colorGreen,gameName[i].colorBlue) 
-        love.graphics.print(gameName[i].character, gameName[i].characterPosX, 25, 0, 5, 5)
-    end
-    love.graphics.setColor( 1, 1, 1)
-    love.graphics.print("Score: " .. score, 20, 525, 0, 2, 2)
-    love.graphics.setColor(1, 1, 0)
-    love.graphics.rectangle("line", 5, 105, 590, 390)
-    if gameover == true then
-        love.graphics.setColor(1, 0, 0)
-        love.graphics.print("GameOver", 50, 200, 0, 8, 8)  
-        love.graphics.setColor(0, 1, 1)
-        love.graphics.print("Press r-key to play again!", 70, 400, 0, 1, 1)
-        love.graphics.print("Press Enter to quit!", 70, 430, 0, 1, 1)
-    else
-        love.graphics.draw(playerImage, playerposX, playerposY)
-        for i = 1, 5, 1 do 
-            love.graphics.setColor(targets[i].colorRed, targets[i].colorGreen, targets[i].colorBlue) 
-            love.graphics.circle("fill", targets[i].targetPosX, targets[i].targetPosY, 12)
-        end
-
-    end
-end
-
-
 end
