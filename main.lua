@@ -96,18 +96,20 @@ function love.keypressed(key, scancode, isrepeat)
     end
 -- playerDirX = 1 means player is moving to the right, -1 to the left and 0 not moving on the X axes
 -- playerDirY = 1 means player is moving down, -1 moving up and 0 not moving on the Y axes
-    if key == "right" then 
-        playerDirX = 1
-        playerDirY = 0
-    elseif key == "left" then
-        playerDirX = -1
-        playerDirY = 0
-    elseif key == "down" then 
-        playerDirX = 0
-        playerDirY = 1
-    elseif key == "up" then
-        playerDirX = 0
-        playerDirY = -1
+   if intro == false then
+        if key == "right" then 
+            playerDirX = 1
+            playerDirY = 0
+        elseif key == "left" then
+            playerDirX = -1
+            playerDirY = 0
+        elseif key == "down" then 
+            playerDirX = 0
+            playerDirY = 1
+        elseif key == "up" then
+            playerDirX = 0
+            playerDirY = -1
+        end
     end
 end
 
@@ -139,7 +141,7 @@ function love.update(dt)
                 targets[i].colorGreen = 1
                 targets[i].colorBlue = 1
             end
-        end 
+        end
     end     
 end
 
