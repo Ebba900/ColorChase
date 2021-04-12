@@ -34,6 +34,22 @@ local targets = {
     { targetPosX = 475, targetPosY = 420, colorRed = 0, colorGreen = 1, colorBlue = 1},
     { targetPosX = 275, targetPosY = 200, colorRed = 0, colorGreen = 1, colorBlue = 1},
 }
+
+function updateGameNameColor()
+    for i = 1, 11 , 1 do 
+        if gameName[i].colorRed > 1 then
+            gameName[i].colorRed = 0
+            gameName[i].colorGreen = 1
+            gameName[i].colorBlue = 1
+        else 
+            gameName[i].colorRed = gameName[i].colorRed + 0.001
+            gameName[i].colorGreen = gameName[i].colorGreen - 0.001
+            gameName[i].colorBlue = gameName[i].colorBlue - 0.001
+        end 
+    end
+end       
+
+
 function updatePlayerPos(dt)
     if playerposX < 560 and playerDirX == 1 then
         playerposX = playerposX + speed * dt
@@ -96,45 +112,35 @@ function love.keypressed(key, scancode, isrepeat)
 end
 
 function love.update(dt)
-    updatePlayerPos(dt)
-    gameOverCheck(dt)
-    for i = 1, 5, 1 do 
-        distance = ((playerposX + 20 - targets[i].targetPosX)^2 + (playerposY + 30 - targets[i].targetPosY)^2)^0.5
-        targets[i].colorRed = targets[i].colorRed + 0.001
-        targets[i].colorGreen = targets[i].colorGreen - 0.001
-        targets[i].colorBlue = targets[i].colorBlue - 0.001
+    updateGameNameColor()
+    if intro == false then 
+        updatePlayerPos(dt)
+        gameOverCheck(dt)
+        for i = 1, 5, 1 do 
+            distance = ((playerposX + 20 - targets[i].targetPosX)^2 + (playerposY + 30 - targets[i].targetPosY)^2)^0.5
+            targets[i].colorRed = targets[i].colorRed + 0.001
+            targets[i].colorGreen = targets[i].colorGreen - 0.001
+            targets[i].colorBlue = targets[i].colorBlue - 0.001
         
-        if distance < 30 then 
-            score = score + 10 * targets[i].colorRed 
-            love.audio.stop( )
-            love.audio.play(scoreSound)
-            targets[i].targetPosX = randomGenerator:random(25, 575)
-            targets[i].targetPosY = randomGenerator:random(125, 450)
-            speed = speed + 10
-            targets[i].colorRed = 0
-            targets[i].colorGreen = 1
-            targets[i].colorBlue = 1
-        else if targets[i].colorRed > 1 then 
-            targets[i].targetPosX = randomGenerator:random(25, 575)
-            targets[i].targetPosY = randomGenerator:random(125, 450)
-            targets[i].colorRed = 0
-            targets[i].colorGreen = 1
-            targets[i].colorBlue = 1
-        end
-    end 
-
-    for i = 1, 11 , 1 do 
-        if gameName[i].colorRed > 1 then
-            gameName[i].colorRed = 0
-            gameName[i].colorGreen = 1
-            gameName[i].colorBlue = 1
-        else 
-            gameName[i].colorRed = gameName[i].colorRed + 0.001
-            gameName[i].colorGreen = gameName[i].colorGreen - 0.001
-            gameName[i].colorBlue = gameName[i].colorBlue - 0.001
+            if distance < 30 then 
+                score = score + 10 * targets[i].colorRed 
+                love.audio.stop( )
+                love.audio.play(scoreSound)
+                targets[i].targetPosX = randomGenerator:random(25, 575)
+                targets[i].targetPosY = randomGenerator:random(125, 450)
+                speed = speed + 10
+                targets[i].colorRed = 0
+                targets[i].colorGreen = 1
+                targets[i].colorBlue = 1
+            else if targets[i].colorRed > 1 then 
+                targets[i].targetPosX = randomGenerator:random(25, 575)
+                targets[i].targetPosY = randomGenerator:random(125, 450)
+                targets[i].colorRed = 0
+                targets[i].colorGreen = 1
+                targets[i].colorBlue = 1
+            end
         end 
-    end
-            
+    end     
 end
 
 function drawIntro()
