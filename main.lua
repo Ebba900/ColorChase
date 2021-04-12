@@ -3,15 +3,13 @@ local playerImage
 local distance 
 local randomGenerator
 local speed = 60
-local gameover = 0
-local playerDirX 
-local playerDirY
+local gameover = false
+local playerDirX = 0
+local playerDirY = 0
 local playerposX = 275
 local playerposY = 275
 local scoreSound
 local intro = true
-local time = 1
-local timeDt
 
 local gameName = {
     {character = "C", characterPosX = 10, colorRed = 0, colorGreen = 1, colorBlue = 1},
@@ -65,16 +63,34 @@ end
 
 function gameOverCheck(dt)
     if playerposX > 560 and playerDirX == 1 then
-        gameover = 1
+        gameover = true
     elseif playerposX < 10 and playerDirX == -1 then 
-        gameover = 1
+        gameover = true
     end 
     if playerposY > 445 and playerDirY == 1 then
-        gameover = 1
+        gameover = true
     elseif playerposY < 105 and playerDirY == -1 then 
-        gameover = 1
+        gameover = true
     end
 end
+
+function resetGame ()
+    score = 0
+    speed = 60
+    gameover = false
+    playerDirX = 0
+    playerDirY = 0
+    playerposX = 275
+    playerposY = 275
+    targets = {
+        { targetPosX = 100, targetPosY = 175, colorRed = 0, colorGreen = 1, colorBlue = 1},
+        { targetPosX = 100, targetPosY = 400, colorRed = 0, colorGreen = 1, colorBlue = 1},
+        { targetPosX = 475, targetPosY = 175, colorRed = 0, colorGreen = 1, colorBlue = 1},
+        { targetPosX = 475, targetPosY = 420, colorRed = 0, colorGreen = 1, colorBlue = 1},
+        { targetPosX = 275, targetPosY = 200, colorRed = 0, colorGreen = 1, colorBlue = 1},
+    }
+end
+
 
 function love.load() 
     randomGenerator = love.math.newRandomGenerator()
@@ -93,6 +109,12 @@ end
 function love.keypressed(key, scancode, isrepeat) 
     if key == "space" then 
         intro = false
+    end
+if key == "r"  and gameover == true then 
+        resetGame()
+    end
+    if key == "return" and gameover == true then
+        love.event.push( "quit")
     end
 -- playerDirX = 1 means player is moving to the right, -1 to the left and 0 not moving on the X axes
 -- playerDirY = 1 means player is moving down, -1 moving up and 0 not moving on the Y axes
@@ -170,9 +192,12 @@ function drawGameBoard()
     love.graphics.print("Score: " .. score, 20, 525, 0, 2, 2)
     love.graphics.setColor(1, 1, 0)
     love.graphics.rectangle("line", 5, 105, 590, 390)
-    if gameover == 1 then
+    if gameover == true then
         love.graphics.setColor(1, 0, 0)
         love.graphics.print("GameOver", 50, 200, 0, 8, 8)  
+        love.graphics.setColor(0, 1, 1)
+        love.graphics.print("Press r-key to play again!", 70, 400, 0, 1, 1)
+        love.graphics.print("Press Enter to quit!", 70, 430, 0, 1, 1)
     else
         love.graphics.draw(playerImage, playerposX, playerposY)
         for i = 1, 5, 1 do 
